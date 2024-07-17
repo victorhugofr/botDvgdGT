@@ -25,28 +25,14 @@ def comment_on_shorts(comment_text, screenshot_dir="screenshots"):
     actions = ActionChains(driver)
     while True:
         try:
-            current_date = datetime.now().strftime("%d-%m-%Y %H-%M")
-            time.sleep(33)
-            shorts_button = driver.find_element(By.XPATH, "//yt-formatted-string[text()='Shorts']")
-            shorts_button.click()
-            time.sleep(6)
-            actions.send_keys(Keys.SPACE)
-            actions.perform()
-            # Clicar no botão 'Comentarios'
-            print(f"Tentando achar botao de comentario")
-            comments_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='comments-button']/ytd-button-renderer/yt-button-shape/label/button")))
-            comments_button.click()
-            print(f"clicando no botao de comentario")
-            time.sleep(5)
-
+            time.sleep(30)
             # Localizar a área de comentário e comentar
             print(f"tentando clicar no botao escrever")
-            comment_box = wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='placeholder-area']")))
+            comment_box = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@class='DraftEditor-editorContainer']/div")))
             comment_box.click()
             time.sleep(2)
-            active_comment_box = driver.find_element(By.XPATH, "//div[@id='contenteditable-root']")
-            active_comment_box.send_keys(current_date+'\n'+comment_text)
-            active_comment_box.send_keys(Keys.CONTROL, Keys.ENTER)
+            comment_box.send_keys(current_date+' '+comment_text)
+            comment_box.send_keys(Keys.ENTER)
             time.sleep(3)
             screenshot_path = os.path.join(screenshot_dir, f"screen_{current_date}_shot_{screenshot_count}.png")
             driver.save_screenshot(screenshot_path)
@@ -56,7 +42,7 @@ def comment_on_shorts(comment_text, screenshot_dir="screenshots"):
                 break
 
             # Passar para o próximo vídeo
-            next_button = driver.find_element(By.XPATH, "//*[@id='navigation-button-down']/ytd-button-renderer/yt-button-shape/button")
+            next_button = driver.find_element(By.XPATH, "//*[@aria-label='Ir para o próximo vídeo']")
             next_button.click()
             time.sleep(10)
         except Exception as e:
@@ -66,13 +52,13 @@ def comment_on_shorts(comment_text, screenshot_dir="screenshots"):
 
 try:
     # Navegar para o YouTube
-    driver.get("https://www.youtube.com")
+    driver.get("https://www.tiktok.com/explore")
     driver.maximize_window()
     
     # Esperar a página carregar
-    time.sleep(20)
+    time.sleep(80)
     # Obter a data atual
     current_date = datetime.now().strftime("%d-%m-%Y %H:%M")
-    comment_on_shorts(f"FUTEBOL & PORRADA \n GTA Torcidas é um server online que atua na plataforma SA-MP onde simulamos a vida de um torcedor organizado, venha jogar conosco. \n COMO BAIXAR O GTA TORCIDAS PARA PC/NOTEBOOK:\nhttps://youtu.be/BBPaYzSaKYI?si=e9GTCim-2pzxzMIT \n--------------------------------------------------- \n COMO BAIXAR GTA TORCIDAS PELO CELULAR: \nhttps://youtu.be/2O60gbFDZOg?si=6GKKqJo0eqiw6-gS \n--------------------------------------------------- \n Saiba mais em: \nhttps://taplink.cc/gta.torcidas")
+    comment_on_shorts(f"GTA Torcidas é um server SA-MP onde simulamos a vida de um torcedor organizado, venha jogar conosco. https://taplink.cc/gta.torcidas")
 finally:
     driver.quit()
